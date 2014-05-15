@@ -57,7 +57,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-clean');
 
   // Default task(s).
-  grunt.registerTask('default', ['karma:test', 'ngtemplates', 'concat', 'uglify', 'clean']);
+  grunt.registerTask('build', ['karma:test', 'ngtemplates', 'concat', 'uglify', 'clean']);
   grunt.registerTask('test', ['karma:test']);
   grunt.registerTask('debug', ['karma:debug']);
 
