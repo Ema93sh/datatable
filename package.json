@@ -1,0 +1,30 @@
+{
+  "name": "datatable",
+  "version": "0.0.0",
+  "description": "Angularjs implementation of datatables",
+  "main": "datatables.js",
+  "directories": {
+    "test": "test"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "karma": "~0.12.14",
+    "karma-chrome-launcher": "~0.1.3",
+    "karma-jasmine": "~0.1.5",
+    "grunt": "^0.4.4",
+    "grunt-angular-templates": "^0.5.4",
+    "grunt-contrib-concat": "^0.4.0",
+    "grunt-contrib-uglify": "^0.4.0",
+    "grunt-karma": "^0.8.3",
+    "grunt-contrib-clean": "^0.5.0",
+    "karma-coverage": "^0.2.1"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "angularjs"
+  ],
+  "author": "Ema93sh",
+  "license": "MIT"
+}
