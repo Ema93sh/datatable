@@ -1,4 +1,4 @@
-Angular UI  - Datatable
+Angular UI  - Datatable [![Build Status](https://travis-ci.org/Ema93sh/datatable.svg?branch=master)](https://travis-ci.org/Ema93sh/datatable)
 =========================
 
 ## Usage:
