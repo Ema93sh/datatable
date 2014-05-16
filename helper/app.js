@@ -75,10 +75,19 @@ angular.module('testModule', ['ui.datatable'])
 			
 		];
 
+		$scope.add = function(data) {
+			$scope.tableData.push(data);
+		};
+
+		$scope.remove = function(data) {
+
+		};
+
 		$scope.options = {
 			'sortable': ['amount', 'date_added'],
 			'display_name': [{'amount': 'Amount'}, {'date_added': 'Date Added'}, {'description': 'Description'}],
 			'filter' : {'enable' : true, 'columns' : ['description', 'amount']},
 			'limit' : 5,
+			'add' : {'enable' : true, 'function': $scope.add, 'required' : ['amount', 'date_added']}
 		};
 	}]);

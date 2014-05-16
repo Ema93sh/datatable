@@ -1,4 +1,5 @@
-/**
+/*
+*
 *  Datatables
 *
 */
@@ -82,6 +83,25 @@ angular.module('ui.datatable', [])
                     }
                 });
             });
+        };
+
+        $scope.add = function(data) {
+            if ($scope.options.add) {
+                $scope.options.add(data);    
+            }
+        };
+
+        $scope.remove = function(data) {
+            if ($scope.options.remove) {
+                $scope.options.remove(data);
+            }
+        };
+
+        $scope.enableSearch = function() {
+            if ($scope.options.filter && $scope.options.filter.enable) {
+                return true;
+            }
+            return false;
         };
 
         $scope.$watch("search", function(oldvalue, newvalue) {

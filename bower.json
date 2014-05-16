@@ -7,9 +7,9 @@
   ],
   "description": "Datatable in angularjs",
   "main": [
-    "./build/datatable.css",
-    "./build/datatable.js",
-    "./build/datatable.min.js"
+    "build/datatable.css",
+    "build/datatable.js",
+    "build/datatable.min.js"
   ],
   "keywords": [
     "tables",
@@ -19,11 +19,14 @@
   "license": "MIT",
   "private": true,
   "ignore": [
-    "**/.*",
     "node_modules",
     "bower_components",
     "test",
-    "tests"
+    ".gitignore",
+    ".travis.yml",
+    "Gruntfile.js",
+    "index.html",
+    "package.json"
   ],
   "dependencies": {
     "angularjs": "*",

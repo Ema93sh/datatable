@@ -1,4 +1,5 @@
-/**
+/*
+*
 *  Datatables
 *
 */
@@ -82,6 +83,25 @@ angular.module('ui.datatable', [])
                     }
                 });
             });
+        };
+
+        $scope.add = function(data) {
+            if ($scope.options.add) {
+                $scope.options.add(data);    
+            }
+        };
+
+        $scope.remove = function(data) {
+            if ($scope.options.remove) {
+                $scope.options.remove(data);
+            }
+        };
+
+        $scope.enableSearch = function() {
+            if ($scope.options.filter && $scope.options.filter.enable) {
+                return true;
+            }
+            return false;
         };
 
         $scope.$watch("search", function(oldvalue, newvalue) {
@@ -173,7 +193,7 @@ angular.module('ui.datatable').run(['$templateCache', function($templateCache) {
 
   $templateCache.put('datatable.html',
     "<div>\n" +
-    "\t<div class=\"col-md-3 pull-right input-group\">\n" +
+    "\t<div class=\"col-md-3 pull-right input-group\" ng-show=\"enableSearch()\">\n" +
     "        <span class=\"input-group-addon\">\n" +
     "          <span class=\"glyphicon glyphicon-search\"></span>\n" +
     "        </span>\n" +

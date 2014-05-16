@@ -172,5 +172,30 @@ describe("Datatable", function() {
 			$scope.$apply();
 			expect($scope.current_page).toBe(1);
 		});
+
+		it("should call add function", function() {
+			var add = jasmine.createSpy();
+			$scope.options.add = add;
+			var data = {'name' : 'Sam', 'age': 32, 'dob': new Date('1/4/2045')};
+			$scope.add(data);
+			expect(add).toHaveBeenCalledWith(data);
+		});
+
+		it("should call remove funtion", function() {
+			var remove = jasmine.createSpy();
+			$scope.options.remove = remove;
+			var data = $scope.tableData[0];
+			$scope.remove(data);
+			expect(remove).toHaveBeenCalledWith(data);
+		});
+
+		it("should enable search", function() {
+			expect($scope.enableSearch()).toBe(true);
+			$scope.options.filter.enable = false;
+			expect($scope.enableSearch()).toBe(false);
+			$scope.options =  {};
+			expect($scope.enableSearch()).toBe(false);
+		});
+		
 	});
 });
