@@ -11,6 +11,7 @@ Angular UI  - Datatable
 
 | Option | Type | Description |
 |--------|------|:-------------|
+|columns| Array | list of columns to be displayed. If specified others will be ignored|
 |sortable| Array | list of columns that have sort enabled |
 |display_name| Array of objects| Display name of each column. Each object is {column name: display Name } |
 |filter| object | <ul> <li>enable</li> <li>columns</li></ul> |

@@ -75,30 +75,34 @@ angular.module('ui.datatable', [])
         };
 
         $scope.getColumns = function() {
+            $scope.columns = [];
             angular.forEach($scope.tableData, function(row, key){
                 angular.forEach(row, function(column_data, column_key) {
                     if($scope.columns.indexOf(column_key) == -1)
                     {
-                        $scope.columns.push(column_key);
+                        if(!$scope.options.hasOwnProperty('columns') || ($scope.options.hasOwnProperty('columns') && $scope.options.columns.indexOf(column_key) != -1))
+                        {
+                            $scope.columns.push(column_key);
+                        }
                     }
                 });
             });
         };
 
         $scope.add = function(data) {
-            if ($scope.options.add) {
+            if ($scope.options.hasOwnProperty('add')) {
                 $scope.options.add(data);    
             }
         };
 
         $scope.remove = function(data) {
-            if ($scope.options.remove) {
+            if ($scope.options.hasOwnProperty('remove')) {
                 $scope.options.remove(data);
             }
         };
 
         $scope.enableSearch = function() {
-            if ($scope.options.filter && $scope.options.filter.enable) {
+            if ($scope.options.hasOwnProperty('filter') && $scope.options.filter.enable) {
                 return true;
             }
             return false;
@@ -114,18 +118,21 @@ angular.module('ui.datatable', [])
 
     .filter('displayName', function() {
         return function(name, $scope) {
-            angular.forEach($scope.options.display_name, function(value, key){
-                if (name in value) {
-                    name = value[name];
-                }
-            });
+            if($scope.options.hasOwnProperty('display_name'))
+            {
+                angular.forEach($scope.options.display_name, function(value, key){
+                    if (name in value) {
+                        name = value[name];
+                    }
+                });
+            }
             return name;
         };
     })
 
     .filter('search', function($filter) {
         return function(input, search, $scope) {
-            if ($scope.options && $scope.options.filter.enable && search) {
+            if ($scope.options && $scope.options.hasOwnProperty('filter') && $scope.options.filter.enable && search) {
                 columns = $scope.options.filter.columns;
                 if(columns)
                 {
@@ -164,7 +171,7 @@ angular.module('ui.datatable', [])
 
     .filter('paginator', function($filter) {
         return function(input, $scope) {
-            var limit = $scope.options.limit ? $scope.options.limit : 50 ;
+            var limit = $scope.options.hasOwnProperty('limit') ? $scope.options.limit : 50 ;
             $scope.no_of_pages = Math.ceil(input.length / limit);
             $scope.no_of_elements_per_page = limit;
             var start_index = ($scope.current_page - 1 ) * $scope.no_of_elements_per_page;

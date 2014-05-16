@@ -7,9 +7,11 @@ describe("Datatable", function() {
 		dataJson = [{
 			'name' : "Magesh",
 			'age'  : 21,
-			'dob'  : new Date("11/05/1992")
+			'dob'  : new Date("11/05/1992"),
+			'id'   : 32
 		},
 		{
+			'id'   : 32,
 			'name' : "Sam",
 			'age'  : 22,
 			'dob'  : new Date("3/01/1991")
@@ -17,10 +19,12 @@ describe("Datatable", function() {
 		{
 			'name' : "Tim",
 			'age'  : 20,
-			'dob'  : new Date("5/03/1993")
+			'dob'  : new Date("5/03/1993"),
+			'id'   : 32,
 		}];
 		
 		optionJson = {
+			'columns': ['name', 'age', 'dob'],
 			'sortable': ['age', 'dob'],
 			'display_name': [{'name': 'Name'}, {'age': 'Age'}, {'dob': 'Date Of Birth'}],
 			'filter' : {'enable' : true, 'columns' : ['name']},
@@ -93,11 +97,18 @@ describe("Datatable", function() {
 	});
 	
 	describe("Controller", function() {
-		it("should get columns from the table data", inject([function() {
+		it("should get columns from the table data", function() {
 			$scope.getColumns();
 			expect($scope.columns.length).toBe(3);
 			expect($scope.columns).toEqual(['name', 'age', 'dob']);
-		}]));
+		});
+
+		it("should get all columns if not defined in options", function(){
+			$scope.options = {'limit' : 4, };
+			$scope.getColumns();
+			expect($scope.columns.length).toBe(4);
+			expect($scope.columns).toEqual(['name', 'age', 'dob', 'id']);
+		});
 
 		it("should sort ascending", function() {
 			expect($scope.sorter.length).toBe(0);
