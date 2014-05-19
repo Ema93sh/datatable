@@ -28,7 +28,7 @@
     "package.json"
   ],
   "dependencies": {
-    "angularjs": "*",
+    "angular": "*",
     "bootstrap": "~3.1.1"
   },
   "devDependencies": {
