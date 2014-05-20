@@ -12,6 +12,7 @@ Angular UI  - Datatable [![Build Status](https://travis-ci.org/Ema93sh/datatable
 | Option | Type | Description |
 |--------|------|:-------------|
 |columns| Array | list of columns to be displayed. If specified others will be ignored|
+|colDefs| object | <ul><li>filter: apply filter to each cell of the column</li></ul>|
 |sortable| Array | list of columns that have sort enabled |
 |display_name| Array of objects| Display name of each column. Each object is {column name: display Name } |
 |filter| object | <ul> <li>enable</li> <li>columns</li></ul> |
@@ -23,20 +24,23 @@ Angular UI  - Datatable [![Build Status](https://travis-ci.org/Ema93sh/datatable
 ```
 $scope.tableData = [
   {
-    'amount' : 'Rs400',
+    'amount' : 400,
     'date_added' : new Date('04-10-2014')
+    'id': 1
   },
   {
-    'amount' : 'Rs100',
+    'amount' : 100,
     'description': "test",
-    'date_added' : new Date('01-10-2014')
+    'date_added' : new Date('01-10-2014'),
+    'id': 2
   },
   {
-    'amount' : 'Rs100',
+    'id': 3,
+    'amount' : 100,
     'date_added' : new Date('04-10-2014')
   },
   {
-    'amount' : 'Rs200',
+    'amount' : 200,
     'date_added' : new Date('02-10-2014')
   }];
 ```  
@@ -44,6 +48,10 @@ $scope.tableData = [
 ### Options: ###
 ```
 $scope.options = {
+  'columns': ['amount', 'date_added', 'description'],
+  'colDefs': {'amount': {'filter': {'name': 'currency', 'args':['Rs']}},
+              'date_added': {'filter': {'name': 'date', 'args':['short']}}
+             },
   'sortable': ['amount', 'date_added'],
   'display_name': [{'amount': 'Amount'}, {'date_added': 'Date Added'}, {'description': 'Description'}],
   'filter' : {'enable' : true, 'columns' : ['description', 'amount']},

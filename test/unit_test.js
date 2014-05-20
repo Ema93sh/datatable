@@ -94,6 +94,22 @@ describe("Datatable", function() {
 			expect(output).toEqual([$scope.tableData[2]]);
 			expect($scope.no_of_pages).toBe(1);
 		}]));
+
+		it("should apply date filter", inject(['$filter', function($filter){
+			$scope.options.colDefs = {'date_added': {'filter': {'name': 'date', 'args': ['short']} } };
+			var date = new Date('03-10-2014');
+			var output = $filter('applyFilter')(date, 'date_added', $scope);
+			var expectedOutput = $filter('date')(date, 'short');
+			expect(output).toBe(expectedOutput);
+		}]));
+
+		it("should apply currency filter", inject(['$filter', function($filter){
+			$scope.options.colDefs = {'amount': {'filter': {'name': 'currency', 'args': ['Rs']}}};
+			var amount = 500;
+			var output = $filter('applyFilter')(amount, 'amount', $scope);
+			var expectedOutput = $filter('currency')(amount, 'Rs');
+			expect(output).toBe(expectedOutput);
+		}]));
 	});
 	
 	describe("Controller", function() {

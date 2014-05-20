@@ -18,7 +18,7 @@
 		<tbody>
 			<tr ng-repeat="row in tableData | orderBy: sorter | search: search: this | paginator: this">
 				<td ng-repeat="column in columns">
-					{{ row[column] }}
+					{{ row[column] | applyFilter: column: this }}
 				</td>
 			</tr>
 		</tbody>

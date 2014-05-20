@@ -130,6 +130,22 @@ angular.module('ui.datatable', [])
         };
     })
 
+    .filter('applyFilter', function($filter) {
+        return function(input, column, $scope) {
+            if ($scope.options.hasOwnProperty('colDefs') && $scope.options.colDefs[column]) {
+                var colDef = $scope.options.colDefs[column];
+                var filter = colDef.filter;
+                if(filter)
+                {
+                    var args = [input];
+                    args.push(filter.args);
+                    return $filter(filter.name).apply(null, args);
+                }
+            }
+            return input;
+        };
+    })
+
     .filter('search', function($filter) {
         return function(input, search, $scope) {
             if ($scope.options && $scope.options.hasOwnProperty('filter') && $scope.options.filter.enable && search) {
@@ -219,7 +235,7 @@ angular.module('ui.datatable').run(['$templateCache', function($templateCache) {
     "\t\t<tbody>\n" +
     "\t\t\t<tr ng-repeat=\"row in tableData | orderBy: sorter | search: search: this | paginator: this\">\n" +
     "\t\t\t\t<td ng-repeat=\"column in columns\">\n" +
-    "\t\t\t\t\t{{ row[column] }}\n" +
+    "\t\t\t\t\t{{ row[column] | applyFilter: column: this }}\n" +
     "\t\t\t\t</td>\n" +
     "\t\t\t</tr>\n" +
     "\t\t</tbody>\n" +
