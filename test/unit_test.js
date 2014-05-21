@@ -25,7 +25,7 @@ describe("Datatable", function() {
 		
 		optionJson = {
 			'columns': ['name', 'age', 'dob'],
-			'sortable': ['age', 'dob'],
+			'sortable': {'columns':['age', 'dob']},
 			'display_name': [{'name': 'Name'}, {'age': 'Age'}, {'dob': 'Date Of Birth'}],
 			'filter' : {'enable' : true, 'columns' : ['name']},
 			'limit' : 5,
@@ -120,11 +120,19 @@ describe("Datatable", function() {
 		});
 
 		it("should get all columns if not defined in options", function(){
-			$scope.options = {'limit' : 4, };
+			$scope.options = {};
 			$scope.getColumns();
 			expect($scope.columns.length).toBe(4);
 			expect($scope.columns).toEqual(['name', 'age', 'dob', 'id']);
 		});
+
+		it("should get columns from options if available", function() {
+			$scope.tableData = {};
+			$scope.getColumns();
+			expect($scope.columns).toEqual(['name', 'age', 'dob']);
+		});
+
+		
 
 		it("should sort ascending", function() {
 			expect($scope.sorter.length).toBe(0);
@@ -140,6 +148,19 @@ describe("Datatable", function() {
 			$scope.sort("shouldnotwork");
 			expect($scope.sorter.length).toBe(0);	
 
+		});
+
+		it("should get sort status", function() {
+			$scope.sorter = ['dob'];
+
+			var status = $scope.sortStatus('dob');
+			expect(status).toBe("asc");
+
+			status = $scope.sortStatus("age");
+			expect(status).toBe("sortable");
+
+			status = $scope.sortStatus("name");
+			expect(status).toBe(null);
 		});
 
 		it("should sort descending on second click", function() {
@@ -222,6 +243,12 @@ describe("Datatable", function() {
 			expect($scope.enableSearch()).toBe(false);
 			$scope.options =  {};
 			expect($scope.enableSearch()).toBe(false);
+		});
+
+		it("should add default search", function() {
+			$scope.options.sortable.default = ['-date_added'];
+			$scope.setupSorter();
+			expect($scope.sorter).toEqual(['-date_added']);
 		});
 		
 	});

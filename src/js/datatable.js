@@ -39,10 +39,10 @@ angular.module('ui.datatable', [])
         };
 
         $scope.sortStatus = function(column) {
-            if ($scope.options.sortable.indexOf(column) != -1) {
+            if ($scope.options.hasOwnProperty('sortable') && $scope.options.sortable.columns.indexOf(column) != -1) {
                 var sort = 'sortable';
                 angular.forEach($scope.sorter, function(value, key){
-                    if(value == getSortName(column)) {
+                    if(value == getSortName(column, "asc")) {
                         sort = "asc";
                     }
                     if (value == getSortName(column, "desc")) {
@@ -55,7 +55,7 @@ angular.module('ui.datatable', [])
         };
 
         $scope.sort = function(column) {
-            if ($scope.options.sortable.indexOf(column) != -1) {
+            if ($scope.options.sortable.columns.indexOf(column) != -1) {
                 var found = null;
                 var prefix = "";
                 var status = $scope.sortStatus(column);
@@ -76,6 +76,10 @@ angular.module('ui.datatable', [])
 
         $scope.getColumns = function() {
             $scope.columns = [];
+            if($scope.options.hasOwnProperty('columns'))
+            {
+                $scope.columns = angular.copy($scope.options.columns);
+            }
             angular.forEach($scope.tableData, function(row, key){
                 angular.forEach(row, function(column_data, column_key) {
                     if($scope.columns.indexOf(column_key) == -1)
@@ -87,6 +91,13 @@ angular.module('ui.datatable', [])
                     }
                 });
             });
+        };
+
+        $scope.setupSorter = function() {
+            if($scope.options.hasOwnProperty('sortable') && $scope.options.sortable.hasOwnProperty('default'))
+            {
+                $scope.sorter = angular.copy($scope.options.sortable.default);
+            }
         };
 
         $scope.add = function(data) {
@@ -208,6 +219,7 @@ angular.module('ui.datatable', [])
             replace: true,
             link: function($scope, iElm, iAttrs, controller) {
                 $scope.getColumns();
+                $scope.setupSorter();
             }
         };
     });

@@ -90,7 +90,7 @@ angular.module('testModule', ['ui.datatable'])
 		$scope.options = {
 			'columns' : ['amount', 'date_added', 'description'],
 			'colDefs' : {'date_added': {'filter': {'name': 'date', 'args': ['short']} }, 'amount': {'filter': {'name': 'currency', 'args': ['Rs']}} },
-			'sortable': ['amount', 'date_added'],
+			'sortable': {'default':['-date_added'], 'columns': ['amount', 'date_added']},
 			'display_name': [{'amount': 'Amount'}, {'date_added': 'Date Added'}, {'description': 'Description'}],
 			'filter' : {'enable' : true, 'columns' : ['description', 'amount']},
 			'limit' : 5,
