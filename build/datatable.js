@@ -119,6 +119,14 @@ angular.module('ui.datatable', [])
             return false;
         };
 
+        $scope.showPagination = function() {
+            if($scope.no_of_pages > 1)
+            {
+                return true;
+            }
+            return false;
+        };
+
         $scope.$watch("search", function(oldvalue, newvalue) {
             if (oldvalue !== newvalue) {
                 $scope.current_page = 1;
@@ -252,7 +260,7 @@ angular.module('ui.datatable').run(['$templateCache', function($templateCache) {
     "\t\t\t</tr>\n" +
     "\t\t</tbody>\n" +
     "\t</table>\n" +
-    "\t<ul class=\"pagination\">\n" +
+    "\t<ul class=\"pagination\" ng-show=\"showPagination()\">\n" +
     "\t  <li ng-class=\"{disabled: current_page == 1}\"><a href=\"\" ng-click=\"prevPage()\" >&laquo;</a></li>\n" +
     "\t  <li ng-repeat=\"n in [] | range: no_of_pages\" ng-class=\"{active: n==current_page}\"><a href=\"\" ng-click=\"setCurrentPage(n)\" >{{n}}  <span class=\"sr-only\">(current)</span></a></li>\n" +
     "\t  <li ng-class=\"{disabled: current_page == no_of_pages}\"><a href=\"\" ng-click=\"nextPage()\" >&raquo;</a></li>\n" +

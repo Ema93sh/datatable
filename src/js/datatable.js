@@ -119,6 +119,14 @@ angular.module('ui.datatable', [])
             return false;
         };
 
+        $scope.showPagination = function() {
+            if($scope.no_of_pages > 1)
+            {
+                return true;
+            }
+            return false;
+        };
+
         $scope.$watch("search", function(oldvalue, newvalue) {
             if (oldvalue !== newvalue) {
                 $scope.current_page = 1;

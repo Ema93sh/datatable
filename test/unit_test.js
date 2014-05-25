@@ -250,6 +250,14 @@ describe("Datatable", function() {
 			$scope.setupSorter();
 			expect($scope.sorter).toEqual(['-date_added']);
 		});
+
+		it("should  hide/show pagination link", function() {
+			$scope.no_of_pages = 1;
+			expect($scope.showPagination()).toBe(false);
+
+			$scope.no_of_pages = 2;
+			expect($scope.showPagination()).toBe(true);			
+		});
 		
 	});
 });
