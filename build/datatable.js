@@ -113,7 +113,7 @@ angular.module('ui.datatable', [])
         };
 
         $scope.enableSearch = function() {
-            if ($scope.options.hasOwnProperty('filter') && $scope.options.filter.enable) {
+            if ($scope.options.hasOwnProperty('search') && $scope.options.search.enable) {
                 return true;
             }
             return false;
@@ -149,7 +149,7 @@ angular.module('ui.datatable', [])
         };
     })
 
-    .filter('applyFilter', function($filter) {
+    .filter('applyColumnFilter', function($filter) {
         return function(input, column, $scope) {
             if ($scope.options.hasOwnProperty('colDefs') && $scope.options.colDefs[column]) {
                 var colDef = $scope.options.colDefs[column];
@@ -157,8 +157,23 @@ angular.module('ui.datatable', [])
                 if(filter)
                 {
                     var args = [input];
-                    args.push(filter.args);
+                    args = args.concat(filter.args);
                     return $filter(filter.name).apply(null, args);
+                }
+            }
+            return input;
+        };
+    })
+    
+    .filter('applyRowFilter', function($filter) {
+        return function(input, $scope) {
+            if ($scope.options.hasOwnProperty('filter')) {
+                var filter = $scope.options.filter;
+                if(filter)
+                {
+                    var args = [input];
+                    args = args.concat(filter.args);
+                    return $filter(filter.name).apply(this, args);
                 }
             }
             return input;
@@ -167,8 +182,8 @@ angular.module('ui.datatable', [])
 
     .filter('search', function($filter) {
         return function(input, search, $scope) {
-            if ($scope.options && $scope.options.hasOwnProperty('filter') && $scope.options.filter.enable && search) {
-                columns = $scope.options.filter.columns;
+            if ($scope.options && $scope.options.hasOwnProperty('search') && $scope.options.search.enable && search) {
+                columns = $scope.options.search.columns;
                 if(columns)
                 {
                     input = $filter('filter')(input, function(row) {
@@ -253,9 +268,9 @@ angular.module('ui.datatable').run(['$templateCache', function($templateCache) {
     "\t\t\t</th>\n" +
     "\t\t</thead>\n" +
     "\t\t<tbody>\n" +
-    "\t\t\t<tr ng-repeat=\"row in tableData | orderBy: sorter | search: search: this | paginator: this\">\n" +
+    "\t\t\t<tr ng-repeat=\"row in tableData | applyRowFilter: this | orderBy: sorter | search: search: this | paginator: this\">\n" +
     "\t\t\t\t<td ng-repeat=\"column in columns\">\n" +
-    "\t\t\t\t\t{{ row[column] | applyFilter: column: this }}\n" +
+    "\t\t\t\t\t{{ row[column] | applyColumnFilter: column: this }}\n" +
     "\t\t\t\t</td>\n" +
     "\t\t\t</tr>\n" +
     "\t\t</tbody>\n" +

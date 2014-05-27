@@ -27,7 +27,7 @@ describe("Datatable", function() {
 			'columns': ['name', 'age', 'dob'],
 			'sortable': {'columns':['age', 'dob']},
 			'display_name': [{'name': 'Name'}, {'age': 'Age'}, {'dob': 'Date Of Birth'}],
-			'filter' : {'enable' : true, 'columns' : ['name']},
+			'search' : {'enable' : true, 'columns' : ['name']},
 			'limit' : 5,
 		};
 
@@ -51,7 +51,7 @@ describe("Datatable", function() {
 		}]));
 
 		it("should not search when not enabled in options", inject(['$filter', function($filter){
-			$scope.options.filter.enable = false;
+			$scope.options.search.enable = false;
 			var output = $filter('search')($scope.tableData, 'tim', $scope);
 			expect(output.length).toBe(3);
 		}]));
@@ -98,7 +98,7 @@ describe("Datatable", function() {
 		it("should apply date filter", inject(['$filter', function($filter){
 			$scope.options.colDefs = {'date_added': {'filter': {'name': 'date', 'args': ['short']} } };
 			var date = new Date('03-10-2014');
-			var output = $filter('applyFilter')(date, 'date_added', $scope);
+			var output = $filter('applyColumnFilter')(date, 'date_added', $scope);
 			var expectedOutput = $filter('date')(date, 'short');
 			expect(output).toBe(expectedOutput);
 		}]));
@@ -106,9 +106,16 @@ describe("Datatable", function() {
 		it("should apply currency filter", inject(['$filter', function($filter){
 			$scope.options.colDefs = {'amount': {'filter': {'name': 'currency', 'args': ['Rs']}}};
 			var amount = 500;
-			var output = $filter('applyFilter')(amount, 'amount', $scope);
+			var output = $filter('applyColumnFilter')(amount, 'amount', $scope);
 			var expectedOutput = $filter('currency')(amount, 'Rs');
 			expect(output).toBe(expectedOutput);
+		}]));
+
+		it("should apply row filter", inject(['$filter', function($filter){
+			$scope.options.filter = {'name': 'filter', 'args':[{'name': "Magesh"}]};
+			var output = $filter('applyRowFilter')($scope.tableData, $scope);
+			var expectedOutput = $filter('filter')($scope.tableData, {'name': 'Magesh'});
+			expect(output).toEqual(expectedOutput);
 		}]));
 	});
 	
@@ -239,7 +246,7 @@ describe("Datatable", function() {
 
 		it("should enable search", function() {
 			expect($scope.enableSearch()).toBe(true);
-			$scope.options.filter.enable = false;
+			$scope.options.search.enable = false;
 			expect($scope.enableSearch()).toBe(false);
 			$scope.options =  {};
 			expect($scope.enableSearch()).toBe(false);
