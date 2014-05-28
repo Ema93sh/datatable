@@ -26,7 +26,7 @@ describe("Datatable", function() {
 		optionJson = {
 			'columns': ['name', 'age', 'dob'],
 			'sortable': {'columns':['age', 'dob']},
-			'display_name': [{'name': 'Name'}, {'age': 'Age'}, {'dob': 'Date Of Birth'}],
+			'colDefs': {'name':{'displayName': "Name"}, 'age': {'displayName': "Age"}},
 			'search' : {'enable' : true, 'columns' : ['name']},
 			'limit' : 5,
 		};
@@ -84,6 +84,14 @@ describe("Datatable", function() {
 			expect(output.length).toBe(1);
 			expect(output).toEqual([$scope.tableData[2]]);
 			expect($scope.no_of_pages).toBe(3);
+		}]));
+
+		it("should add default limit when not specifed", inject(['$filter', function($filter){
+			$scope.options.limit = null;
+			var output = $filter('paginator')($scope.tableData, $scope);
+			expect(output.length).toBe(3);
+			expect(output).toEqual($scope.tableData);
+			expect($scope.no_of_pages).toBe(1);
 		}]));
 
 		it("should paginate after search",inject(['$filter', function($filter){
@@ -228,20 +236,27 @@ describe("Datatable", function() {
 			expect($scope.current_page).toBe(1);
 		});
 
-		it("should call add function", function() {
-			var add = jasmine.createSpy();
-			$scope.options.add = add;
+		it("should call edit function", function() {
+			var edit = jasmine.createSpy();
+			$scope.options.edit = {'enable': true, 'onEdit': edit};
 			var data = {'name' : 'Sam', 'age': 32, 'dob': new Date('1/4/2045')};
-			$scope.add(data);
-			expect(add).toHaveBeenCalledWith(data);
+			$scope.edit(data);
+			expect(edit).toHaveBeenCalledWith(data);
+		});
+		it("should not call edit function when not enabled", function() {
+			var edit = jasmine.createSpy();
+			$scope.options.edit = {'enable': false, 'onEdit': edit};
+			var data = {'name' : 'Sam', 'age': 32, 'dob': new Date('1/4/2045')};
+			$scope.edit(data);
+			expect(edit).not.toHaveBeenCalledWith(data);
 		});
 
-		it("should call remove funtion", function() {
-			var remove = jasmine.createSpy();
-			$scope.options.remove = remove;
+		it("should call delete funtion", function() {
+			var d = jasmine.createSpy();
+			$scope.options.delete = {'enable': true, 'onDelete': d };
 			var data = $scope.tableData[0];
-			$scope.remove(data);
-			expect(remove).toHaveBeenCalledWith(data);
+			$scope.delete(data);
+			expect(d).toHaveBeenCalledWith(data);
 		});
 
 		it("should enable search", function() {

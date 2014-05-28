@@ -3,11 +3,13 @@
     <title>The AngularJs data table</title>
     <link rel="stylesheet" type="text/css" href="bower_components/bootstrap/dist/css/bootstrap.css">
     <link rel="stylesheet" type="text/css" href="build/datatable.css">
-    <script type="text/javascript" src="bower_components/angular/angular.js"></script>
+    <script type="text/javascript" src="bower_components/angular/angular.js"></script>    
+    <script type="text/javascript" src="bower_components/angular-bootstrap/ui-bootstrap.js"></script>
+    <script type="text/javascript" src="bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
     <script type="text/javascript" src="build/datatable.js"></script>
     <script type="text/javascript" src="helper/app.js"></script>
   </head>
-  <body>
+  <body ng-controller="testController">
   <div class="navbar-inverse navbar-static-top" role="navigation">
     <div class="container">
       <div class="navbar-header">
@@ -26,9 +28,65 @@
         <h1>DataTable</h1>
         <p>AngularJs version of datatable</p>
       </div>
-    </div>
-  	<div class="container" ng-controller="testController">
-  		<mg-table mg-data="tableData" mg-data-options=options></mg-table>
-  	</div>
+  </div>
+  	<div class="container">
+  		<mg-table mg-data="tableData" mg-data-options="options"></mg-table>
+      <form class="form-inline">
+        <div class="form-group">
+          <input type="text" class="form-control" placeholder="amount" ng-model="expense.amount">
+        </div>
+        <div class="form-group">
+          <input type="text" class="form-control" placeholder="description" ng-model="expense.description">
+        </div>
+          <button type="submit" class="form-control" ng-click="add(expense)">Add</button>
+         <button class="btn btn-default" ng-click="addData()">Add Random Data</button>
+      </form>
+     
+      <table class="table table-striped">
+      <thead>
+        <th>Option</th>
+        <th>Value</th>  
+      </thead>
+      <tbody>
+        <tr>
+          <td>Columns</td>
+          <td>
+            <ul>
+            <li ng-repeat="column in options.columns">{{column}}</li>
+            </ul>
+          </td>
+        </tr>
+        <tr>
+          <td>Currency</td>
+          <td><input type="text" ng-model="options.colDefs.amount.filter.args[0]"></td>
+        </tr>
+        <tr>
+          <td>Display Name</td>
+          <td>
+            <ul>
+              <li ng-repeat="(column_name, column) in options.colDefs">{{column_name}} - <input type="text" ng-model="column.displayName"></li>
+            </ul>
+          </td>
+        </tr>
+        <tr>
+          <td>Search</td>
+          <td>
+            <ul>
+              <li>enable - <input type="checkbox" ng-model="options.search.enable"></li>
+              <li>columns -
+                <ul>
+                  <li ng-repeat="column in options.search.columns">{{ column }}</li>
+                </ul>
+              </li>
+            </ul>
+          </td>
+        </tr>
+        <tr>
+          <td>Limit</td>
+          <td><input type="text" ng-model="options.limit"></td>
+        </tr>
+      </tbody>
+    </table>
+  	</div>    
   </body>
 </html>

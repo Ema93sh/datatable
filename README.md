@@ -12,9 +12,8 @@ Angular UI  - Datatable [![Build Status](https://travis-ci.org/Ema93sh/datatable
 | Option | Type | Description |
 |--------|------|:-------------|
 |columns| Array | list of columns to be displayed. If specified others will be ignored|
-|colDefs| object | <ul><li>filter: apply filter to each cell of the column</li></ul>|
+|colDefs| object | <ul><li>display_name: column name to be displayed</li><li>filter: apply filter to each cell of the column</li></ul>|
 |sortable| object | <ul><li>columns:list of columns that have sort enabled</li><li>default: default sort option</li></ul> |
-|display_name| Array of objects| Display name of each column. Each object is {column name: display Name } |
 |search| object | <ul> <li>enable</li> <li>columns</li></ul> |
 |limit| integer | no of items to list per page |
 |filter| object | filter the tableData. specify name and args |

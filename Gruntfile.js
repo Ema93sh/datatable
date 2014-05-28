@@ -46,7 +46,16 @@ module.exports = function(grunt) {
       templates: {
         src: ["<%= ngtemplates.datatable.dest %>"]
       }
-    }
+    },
+    watch: {
+      scripts: {
+        files: ['src/**/*.*', 'test/*test.js'],
+        tasks: ['build'],
+        options: {
+          spawn: false,
+        },
+      }
+    },
   });
 
   // Load the plugin that provides the "uglify" task.
@@ -55,6 +64,8 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-concat');
   grunt.loadNpmTasks('grunt-karma');
   grunt.loadNpmTasks('grunt-contrib-clean');
+  grunt.loadNpmTasks('grunt-contrib-watch');
+
 
   // Default task(s).
   grunt.registerTask('build', ['karma:test', 'ngtemplates', 'concat', 'uglify', 'clean']);

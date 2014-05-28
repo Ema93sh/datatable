@@ -5,7 +5,7 @@
         </span>
         <input type="text" placeholder="search" class="form-control" ng-model="search">
      </div>
-	<table class="table table-striped">
+	<table class="table table-hover">
 		<thead>
 			<th ng-repeat="column in columns" ng-click="sort(column)">
 				<div class="sort-icon">
@@ -14,11 +14,22 @@
 				</div>
 				<span>{{ column | displayName:this }}</span>
 			</th>
+			<th class="edit-header">
+			</th>
 		</thead>
 		<tbody>
-			<tr ng-repeat="row in tableData | applyRowFilter: this | orderBy: sorter | search: search: this | paginator: this">
+			<tr ng-repeat="row in tableData | applyRowFilter: this | orderBy: sorter | search: search: this | paginator: this" ng-mouseover="mouseOver(row)" ng-mouseleave="mouseLeave(row)">
 				<td ng-repeat="column in columns">
 					{{ row[column] | applyColumnFilter: column: this }}
+				</td>
+				<td class="edit-body"ng-show="row.edit">
+					<div>
+						<button class="btn btn-default btn-sm" ng-show="options.edit.enable" ng-click="edit(row)"><span class="glyphicon glyphicon-edit"></span></button>
+						<button class="btn btn-default btn-sm" ng-show="options.delete.enable" ng-click="delete(row)"><span class="glyphicon glyphicon-trash"></span></button>
+					</div>
+				</td>
+				<td ng-hide="row.edit">
+					
 				</td>
 			</tr>
 		</tbody>

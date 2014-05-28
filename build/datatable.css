@@ -4,3 +4,11 @@
 	font-size: 10px;
 	display: inline-block;
 }
+
+.edit-header {
+	width:88px;
+}
+
+.edit-body {
+	width:88px;		
+}

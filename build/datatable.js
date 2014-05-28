@@ -14,6 +14,8 @@ angular.module('ui.datatable', [])
 
         $scope.no_of_pages = 0;
 
+        $scope.showEditColumn = false;
+
         getSortName = function(column, order) {
             if (order == "asc") return column;
             if (order == "desc") return "-" + column;
@@ -100,15 +102,15 @@ angular.module('ui.datatable', [])
             }
         };
 
-        $scope.add = function(data) {
-            if ($scope.options.hasOwnProperty('add')) {
-                $scope.options.add(data);    
+        $scope.edit = function(data) {
+            if ($scope.options.hasOwnProperty('edit')  && $scope.options.edit.enable) {
+                $scope.options.edit.onEdit(data);    
             }
         };
 
-        $scope.remove = function(data) {
-            if ($scope.options.hasOwnProperty('remove')) {
-                $scope.options.remove(data);
+        $scope.delete = function(data) {
+            if ($scope.options.hasOwnProperty('delete') && $scope.options.delete.enable) {
+                $scope.options.delete.onDelete(data);
             }
         };
 
@@ -127,6 +129,19 @@ angular.module('ui.datatable', [])
             return false;
         };
 
+        $scope.mouseOver = function(row) {
+            if($scope.options.edit.enable || $scope.options.delete.enable)
+            {
+                row.edit = true;
+                $scope.showEditColumn = true;
+            }
+        };
+
+        $scope.mouseLeave = function(row) {
+            row.edit = false;
+            $scope.showEditColumn = false;
+        };
+
         $scope.$watch("search", function(oldvalue, newvalue) {
             if (oldvalue !== newvalue) {
                 $scope.current_page = 1;
@@ -137,13 +152,11 @@ angular.module('ui.datatable', [])
 
     .filter('displayName', function() {
         return function(name, $scope) {
-            if($scope.options.hasOwnProperty('display_name'))
+            if($scope.options.hasOwnProperty('colDefs'))
             {
-                angular.forEach($scope.options.display_name, function(value, key){
-                    if (name in value) {
-                        name = value[name];
-                    }
-                });
+                if ($scope.options.colDefs.hasOwnProperty(name) && $scope.options.colDefs[name].displayName) {
+                    return $scope.options.colDefs[name].displayName;
+                }
             }
             return name;
         };
@@ -221,7 +234,7 @@ angular.module('ui.datatable', [])
 
     .filter('paginator', function($filter) {
         return function(input, $scope) {
-            var limit = $scope.options.hasOwnProperty('limit') ? $scope.options.limit : 50 ;
+            var limit = $scope.options.hasOwnProperty('limit') && $scope.options.limit != null ? $scope.options.limit : 50 ;
             $scope.no_of_pages = Math.ceil(input.length / limit);
             $scope.no_of_elements_per_page = limit;
             var start_index = ($scope.current_page - 1 ) * $scope.no_of_elements_per_page;
@@ -243,6 +256,10 @@ angular.module('ui.datatable', [])
             link: function($scope, iElm, iAttrs, controller) {
                 $scope.getColumns();
                 $scope.setupSorter();
+                iAttrs.$observe('mgDataOptions', function(val) {
+                  $scope.getColumns();
+                    $scope.setupSorter();
+                });
             }
         };
     });
@@ -257,7 +274,7 @@ angular.module('ui.datatable').run(['$templateCache', function($templateCache) {
     "        </span>\n" +
     "        <input type=\"text\" placeholder=\"search\" class=\"form-control\" ng-model=\"search\">\n" +
     "     </div>\n" +
-    "\t<table class=\"table table-striped\">\n" +
+    "\t<table class=\"table table-hover\">\n" +
     "\t\t<thead>\n" +
     "\t\t\t<th ng-repeat=\"column in columns\" ng-click=\"sort(column)\">\n" +
     "\t\t\t\t<div class=\"sort-icon\">\n" +
@@ -266,11 +283,22 @@ angular.module('ui.datatable').run(['$templateCache', function($templateCache) {
     "\t\t\t\t</div>\n" +
     "\t\t\t\t<span>{{ column | displayName:this }}</span>\n" +
     "\t\t\t</th>\n" +
+    "\t\t\t<th class=\"edit-header\">\n" +
+    "\t\t\t</th>\n" +
     "\t\t</thead>\n" +
     "\t\t<tbody>\n" +
-    "\t\t\t<tr ng-repeat=\"row in tableData | applyRowFilter: this | orderBy: sorter | search: search: this | paginator: this\">\n" +
+    "\t\t\t<tr ng-repeat=\"row in tableData | applyRowFilter: this | orderBy: sorter | search: search: this | paginator: this\" ng-mouseover=\"mouseOver(row)\" ng-mouseleave=\"mouseLeave(row)\">\n" +
     "\t\t\t\t<td ng-repeat=\"column in columns\">\n" +
     "\t\t\t\t\t{{ row[column] | applyColumnFilter: column: this }}\n" +
+    "\t\t\t\t</td>\n" +
+    "\t\t\t\t<td class=\"edit-body\"ng-show=\"row.edit\">\n" +
+    "\t\t\t\t\t<div>\n" +
+    "\t\t\t\t\t\t<button class=\"btn btn-default btn-sm\" ng-show=\"options.edit.enable\" ng-click=\"edit(row)\"><span class=\"glyphicon glyphicon-edit\"></span></button>\n" +
+    "\t\t\t\t\t\t<button class=\"btn btn-default btn-sm\" ng-show=\"options.delete.enable\" ng-click=\"delete(row)\"><span class=\"glyphicon glyphicon-trash\"></span></button>\n" +
+    "\t\t\t\t\t</div>\n" +
+    "\t\t\t\t</td>\n" +
+    "\t\t\t\t<td ng-hide=\"row.edit\">\n" +
+    "\t\t\t\t\t\n" +
     "\t\t\t\t</td>\n" +
     "\t\t\t</tr>\n" +
     "\t\t</tbody>\n" +
